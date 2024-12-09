@@ -1,5 +1,5 @@
 shadowJar {
-    println(properties)
+    archiveFileName.set("${project.name}.jar")
     manifest {
         attributes 'Main-Class': 'io.github.busy_spin.media_driver.MediaDriver' // Set your main class
     }
