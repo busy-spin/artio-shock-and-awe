@@ -1,5 +1,8 @@
+// Apply false means do not apply to subprojects
+// Plugin 'java' is a core Gradle plugin, which is already on the classpath. Requesting it with the 'apply false' option is a no-op.
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
 }
 
 allprojects {
@@ -11,11 +14,8 @@ allprojects {
     }
 }
 
+// apply following settings to all sub projects
 subprojects {
     apply plugin: 'java'
-
-
-    dependencies {
-
-    }
+    apply plugin: 'com.github.johnrengelman.shadow'
 }

@@ -8,5 +8,6 @@ build
 *.iml
 *.ipr
 *.iws
+out
 
 gradle
