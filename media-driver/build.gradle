@@ -1,6 +1,11 @@
 shadowJar {
     archiveFileName.set("${project.name}.jar")
     manifest {
-        attributes 'Main-Class': 'io.github.busy_spin.media_driver.MediaDriver' // Set your main class
+        attributes 'Main-Class': 'io.github.busy_spin.media_driver.MediaDriverApp' // Set your main class
     }
+}
+
+
+dependencies {
+    implementation 'io.aeron:aeron-driver:1.46.7'
 }
