@@ -1,0 +1,5 @@
+shadowJar {
+    manifest {
+        attributes 'Main-Class': 'io.github.busy_spin.artio.fix_engine.FixEngineApp' // Set your main class
+    }
+}

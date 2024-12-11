@@ -1,4 +1,4 @@
-package io.github.busy_spin.media_driver;
+package io.github.busy_spin.artio.media_driver;
 
 import io.aeron.driver.MediaDriver;
 import io.aeron.driver.ThreadingMode;

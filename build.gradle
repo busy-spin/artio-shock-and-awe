@@ -6,7 +6,7 @@ plugins {
 }
 
 allprojects {
-    group = 'io.github.busy-spin.artio'
+    group = 'io.github.busy_spin.artio'
     version = '1.0.0'
 
     repositories {
@@ -18,4 +18,12 @@ allprojects {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'com.github.johnrengelman.shadow'
+
+    plugins.withId('com.github.johnrengelman.shadow') {
+        tasks.named('shadowJar') {
+            archiveFileName.set("${project.name}.jar")
+        }
+    }
+
+
 }

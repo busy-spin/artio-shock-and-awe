@@ -7,4 +7,5 @@
 
 rootProject.name = 'artio-shock-and-awe'
 include 'media-driver'
+include 'fix-engine'
 
