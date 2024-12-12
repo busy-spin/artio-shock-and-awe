@@ -1,8 +1,11 @@
 [versions]
 aeron = "1.46.7"
+artio = "0.160"
 
 [libraries]
 aeron = { group = "io.aeron", name="aeron-driver", version.ref="aeron"}
+artioCore = {group = "uk.co.real-logic", name="artio-core", version.ref="artio"}
+artioSessionCodecs = {group = "uk.co.real-logic", name="artio-session-codecs", version.ref="artio"}
 
 [plugins]
 shadow = { id = 'com.github.johnrengelman.shadow', version = '8.1.1' }
