@@ -10,4 +10,4 @@ build
 *.iws
 out
 
-gradle
+gradle/wrapper
