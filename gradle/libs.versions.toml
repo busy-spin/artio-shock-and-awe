@@ -2,7 +2,7 @@
 aeron = "1.46.7"
 
 [libraries]
-agrona = { group = "org.agrona", name = "agrona", version = { strictly = "[1.23.1, 2.0[", require = "1.23.1" } }
+aeron = { group = "io.aeron", name="aeron-driver", version.ref="aeron"}
 
 [plugins]
 shadow = { id = 'com.github.johnrengelman.shadow', version = '8.1.1' }
