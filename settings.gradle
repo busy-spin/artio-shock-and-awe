@@ -8,4 +8,6 @@
 rootProject.name = 'artio-shock-and-awe'
 include 'media-driver'
 include 'fix-engine'
+include 'artio-acceptor'
+include 'artio-initiator'
 

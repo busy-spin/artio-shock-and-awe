@@ -11,3 +11,5 @@ build
 out
 
 gradle/wrapper
+
+logs

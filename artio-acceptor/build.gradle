@@ -1,0 +1,10 @@
+shadowJar {
+    manifest {
+        attributes 'Main-Class': 'io.github.busy_spin.artio.acceptor.AcceptorApp' // Set your main class
+    }
+}
+
+dependencies {
+    implementation libs.artioCore
+    implementation libs.artioSessionCodecs
+}
