@@ -1,6 +1,5 @@
 package io.github.busy_spin.artio.initiator;
 
-import io.aeron.Aeron;
 import io.aeron.CommonContext;
 import org.agrona.concurrent.Agent;
 import org.agrona.concurrent.SystemEpochClock;
@@ -13,7 +12,7 @@ public class InitiatorAgent implements Agent {
 
     private final ArtioCallBackHandler handler = new ArtioCallBackHandler();
 
-    private final long testReqIntervalInMs = 5_000;
+    private final long reportInterval = 5_000;
 
     private long lastInterval = SystemEpochClock.INSTANCE.time();
 
@@ -38,12 +37,14 @@ public class InitiatorAgent implements Agent {
 
     @Override
     public int doWork() throws Exception {
-        if (SystemEpochClock.INSTANCE.time() > testReqIntervalInMs + lastInterval) {
-            System.out.println("Sending test request !!!");
+        handler.sendTestRequest();
+        library.poll(10);
+        if (SystemEpochClock.INSTANCE.time() > reportInterval + lastInterval) {
             lastInterval = SystemEpochClock.INSTANCE.time();
-            handler.sendTestRequest();
+            handler.printAndResetCounter();
         }
-        return library.poll(10);
+
+        return 1;
     }
 
     @Override

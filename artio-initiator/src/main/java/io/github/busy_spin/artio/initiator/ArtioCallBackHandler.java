@@ -2,7 +2,6 @@ package io.github.busy_spin.artio.initiator;
 
 import io.aeron.logbuffer.ControlledFragmentHandler;
 import org.agrona.DirectBuffer;
-import org.agrona.concurrent.SystemEpochClock;
 import uk.co.real_logic.artio.builder.TestRequestEncoder;
 import uk.co.real_logic.artio.decoder.HeartbeatDecoder;
 import uk.co.real_logic.artio.library.*;
@@ -13,6 +12,8 @@ import uk.co.real_logic.artio.util.MutableAsciiBuffer;
 import java.nio.ByteBuffer;
 
 public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcquireHandler, SessionHandler {
+
+    private String testReqId  = "ABC";
 
     private Session session;
 
@@ -50,7 +51,7 @@ public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcqui
         if (session != null) {
             byteBuffer.clear();
             byteBuffer.putLong(System.currentTimeMillis());
-            encoder.testReqID(String.valueOf(SystemEpochClock.INSTANCE.time()));
+            encoder.testReqID(testReqId);
             session.trySend(encoder);
         }
     }
@@ -76,7 +77,7 @@ public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcqui
             decoder.decode(mutableAsciiBuffer, 0, length);
 
             if (decoder.hasTestReqID()) {
-
+                counter++;
             }
         }
 

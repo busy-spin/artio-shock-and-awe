@@ -1,6 +1,6 @@
 shadowJar {
     manifest {
-        attributes 'Main-Class': 'io.github.busy_spin.artio.fix_initiator.InitiatorApp' // Set your main class
+        attributes 'Main-Class': 'io.github.busy_spin.artio.initiator.InitiatorApp' // Set your main class
     }
 }
 
