@@ -12,9 +12,10 @@ public class InitiatorAgent implements Agent {
 
     private final ArtioCallBackHandler handler = new ArtioCallBackHandler();
 
-    private final long reportInterval = 5_000;
+    private final long reportInterval = 1_000;
 
     private long lastInterval = SystemEpochClock.INSTANCE.time();
+
 
     private FixLibrary library;
 

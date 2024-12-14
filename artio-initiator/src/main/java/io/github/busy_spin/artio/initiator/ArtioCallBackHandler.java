@@ -1,7 +1,10 @@
 package io.github.busy_spin.artio.initiator;
 
 import io.aeron.logbuffer.ControlledFragmentHandler;
+import org.HdrHistogram.Histogram;
 import org.agrona.DirectBuffer;
+import org.agrona.concurrent.SystemEpochClock;
+import org.agrona.concurrent.SystemNanoClock;
 import uk.co.real_logic.artio.builder.TestRequestEncoder;
 import uk.co.real_logic.artio.decoder.HeartbeatDecoder;
 import uk.co.real_logic.artio.library.*;
@@ -24,6 +27,8 @@ public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcqui
     private final ByteBuffer byteBuffer = ByteBuffer.allocate(Long.BYTES);
 
     private final MutableAsciiBuffer mutableAsciiBuffer = new MutableAsciiBuffer();
+
+    Histogram histogram = new Histogram(3);
 
     private long counter = 0;
 
@@ -49,16 +54,24 @@ public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcqui
 
     public void sendTestRequest() {
         if (session != null) {
-            byteBuffer.clear();
-            byteBuffer.putLong(System.currentTimeMillis());
             encoder.testReqID(testReqId);
+            long startTime = SystemNanoClock.INSTANCE.nanoTime();
             session.trySend(encoder);
+            long endTime = SystemNanoClock.INSTANCE.nanoTime();
+            histogram.recordValue((endTime - startTime) / 1000);
         }
     }
 
     public void printAndResetCounter() {
-        System.out.println("Count " + counter);
-        counter = 0;
+        System.out.printf("""
+                        >>>
+                        Total  = [%d] p100 = [%d] p99.99 = [%d]
+                       
+                        """,
+                histogram.getTotalCount(),
+                histogram.getValueAtPercentile(100),
+                histogram.getValueAtPercentile(99.99));
+        histogram.reset();
     }
 
     @Override

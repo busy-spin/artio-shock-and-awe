@@ -6,6 +6,7 @@ artio = "0.160"
 aeron = { group = "io.aeron", name="aeron-driver", version.ref="aeron"}
 artioCore = {group = "uk.co.real-logic", name="artio-core", version.ref="artio"}
 artioSessionCodecs = {group = "uk.co.real-logic", name="artio-session-codecs", version.ref="artio"}
+hdrHistogram = { group = "org.hdrhistogram", name = "HdrHistogram", version = "2.2.2" }
 
 [plugins]
 shadow = { id = 'com.github.johnrengelman.shadow', version = '8.1.1' }

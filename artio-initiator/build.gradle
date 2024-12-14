@@ -7,4 +7,5 @@ shadowJar {
 dependencies {
     implementation libs.artioCore
     implementation libs.artioSessionCodecs
+    implementation libs.hdrHistogram
 }
