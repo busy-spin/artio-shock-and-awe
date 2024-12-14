@@ -1,9 +1,6 @@
 package io.github.busy_spin.artio.initiator;
 
-import org.agrona.concurrent.AgentRunner;
-import org.agrona.concurrent.ShutdownSignalBarrier;
-import org.agrona.concurrent.SigInt;
-import org.agrona.concurrent.SleepingIdleStrategy;
+import org.agrona.concurrent.*;
 
 public class InitiatorApp {
     public static void main(String[] args) {
@@ -14,7 +11,7 @@ public class InitiatorApp {
             barrier.signal();
         });
 
-        AgentRunner agentRunner = new AgentRunner(new SleepingIdleStrategy(), Throwable::printStackTrace,
+        AgentRunner agentRunner = new AgentRunner(new NoOpIdleStrategy(), Throwable::printStackTrace,
                 null, new InitiatorAgent());
 
         AgentRunner.startOnThread(agentRunner);

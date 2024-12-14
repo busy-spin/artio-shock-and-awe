@@ -24,6 +24,8 @@ public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcqui
 
     private final MutableAsciiBuffer mutableAsciiBuffer = new MutableAsciiBuffer();
 
+    private long counter = 0;
+
     @Override
     public void onConnect(FixLibrary fixLibrary) {
         System.out.println("Connected to library " + fixLibrary.libraryId());
@@ -36,7 +38,7 @@ public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcqui
 
     @Override
     public void onDisconnect(FixLibrary fixLibrary) {
-        System.out.println("Disconnected from library");
+        System.out.println("Disconnected from library " + fixLibrary.libraryId());
     }
 
     @Override
@@ -49,9 +51,13 @@ public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcqui
             byteBuffer.clear();
             byteBuffer.putLong(System.currentTimeMillis());
             encoder.testReqID(String.valueOf(SystemEpochClock.INSTANCE.time()));
-            System.out.println("Sending test request");
             session.trySend(encoder);
         }
+    }
+
+    public void printAndResetCounter() {
+        System.out.println("Count " + counter);
+        counter = 0;
     }
 
     @Override
@@ -66,12 +72,11 @@ public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcqui
                                                       long position,
                                                       OnMessageInfo messageInfo) {
         if (messageType == HeartbeatDecoder.MESSAGE_TYPE) {
-            System.out.println("Heart beat received !!!");
             mutableAsciiBuffer.wrap(buffer, offset, length);
             decoder.decode(mutableAsciiBuffer, 0, length);
 
             if (decoder.hasTestReqID()) {
-                System.out.println("Test request received !!! " + decoder.testReqIDAsString());
+
             }
         }
 
