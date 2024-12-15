@@ -32,6 +32,8 @@ public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcqui
 
     private long counter = 0;
 
+    private long delta = 0;
+
     @Override
     public void onConnect(FixLibrary fixLibrary) {
         System.out.println("Connected to library " + fixLibrary.libraryId());
@@ -63,15 +65,19 @@ public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcqui
     }
 
     public void printAndResetCounter() {
+        delta += (histogram.getTotalCount() - counter);
         System.out.printf("""
                         >>>
-                        Total  = [%d] p100 = [%d] p99.99 = [%d]
+                        Send-count  = [%d], receive count = [%d], send-rsv-delta = [%d], p100 = [%d], p99.99 = [%d]
                        
                         """,
                 histogram.getTotalCount(),
+                counter,
+                delta,
                 histogram.getValueAtPercentile(100),
                 histogram.getValueAtPercentile(99.99));
         histogram.reset();
+        counter = 0;
     }
 
     @Override
