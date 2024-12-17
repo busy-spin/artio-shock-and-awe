@@ -6,13 +6,15 @@ import org.HdrHistogram.HistogramIterationValue;
 public class HistogramDemo {
 
     public static void main(String[] args) {
-        Histogram histogram = new Histogram(2);
+        Histogram histogram = new Histogram(1,
+                200_000_000, 5);
 
 // Record some values
-        histogram.recordValue(10);
-        histogram.recordValue(100);
-        histogram.recordValue(1000);
-        histogram.recordValue(2048);
+
+        histogram.recordValue(0);
+        histogram.recordValue(5000);
+        histogram.recordValue(262143);
+        histogram.recordValue(262142);
 
 // Iterate through the histogram
         for (HistogramIterationValue value : histogram.recordedValues()) {

@@ -28,7 +28,7 @@ public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcqui
 
     private final MutableAsciiBuffer mutableAsciiBuffer = new MutableAsciiBuffer();
 
-    Histogram histogram = new Histogram(3);
+    Histogram histogram = new Histogram(1, 2_000_000, 5);
 
     private long counter = 0;
 
@@ -68,13 +68,14 @@ public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcqui
         delta += (histogram.getTotalCount() - counter);
         System.out.printf("""
                         >>>
-                        Send-count  = [%d], receive count = [%d], send-rsv-delta = [%d], p100 = [%d], p99.99 = [%d]
+                        Send-count  = [%d], receive count = [%d], send-rsv-delta = [%d], p100 = [%d], p99.999 = [%d], p99.99 = [%d]
                        
                         """,
                 histogram.getTotalCount(),
                 counter,
                 delta,
                 histogram.getValueAtPercentile(100),
+                histogram.getValueAtPercentile(99.999),
                 histogram.getValueAtPercentile(99.99));
         histogram.reset();
         counter = 0;
