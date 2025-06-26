@@ -11,6 +11,13 @@ pidstat -wt 1
 -t: show per-thread info.
 1: updates every second.
 
+## CPU affinity
+
+taskset -acp <cpu_list> <pid>
+
+```shell
+taskset -acp 0-3 4456
+```
 
 # Start up commands
 
@@ -21,7 +28,7 @@ java -jar ~/apps/media-driver.jar
 ```
 
 ```shell
-java --add-opens java.base/sun.nio.ch=ALL-UNNAMED -Dfix.core.receiver_buffer_size=1048576 -Dfix.core.sender_socket_buffer_size=16777216 -Dfix.core.receiver_socket_buffer_size=16777216 -jar ~/apps/fix-engine.jar
+java -XX:+UnlockExperimentalVMOptions -XX:+UseEpsilonGC -Xmx2g -Xms2g --add-opens java.base/sun.nio.ch=ALL-UNNAMED -Dfix.core.receiver_buffer_size=1048576 -Dfix.core.sender_socket_buffer_size=16777216 -Dfix.core.receiver_socket_buffer_size=16777216 -jar ~/apps/fix-engine.jar
 ```
 
 ```shell
