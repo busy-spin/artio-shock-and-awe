@@ -144,6 +144,7 @@ public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcqui
             final String remoteSubId,
             final String remoteLocationId, final int logonReceivedSequenceNumber, final int logonSequenceIndex) {
 
+        System.out.println("Session exists, requesting session " + localCompId + "->" + remoteCompId);
         library.requestSession(surrogateSessionId, FixLibrary.NO_MESSAGE_REPLAY,
                 FixLibrary.NO_MESSAGE_REPLAY, 10_000);
     }
