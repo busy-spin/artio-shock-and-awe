@@ -3,6 +3,14 @@
 ## htop for single process
 htop -p <pid>
 
+## Context switches
+
+pidstat -wt 1
+
+-w: show voluntary (cswch/s) and non-voluntary (nvcswch/s) context switches.
+-t: show per-thread info.
+1: updates every second.
+
 
 # Start up commands
 
