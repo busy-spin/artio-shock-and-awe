@@ -40,10 +40,6 @@ public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcqui
 
     private long delta = 0;
 
-    private boolean readyToSend = true;
-
-    private long sendTime = -1;
-
     @Override
     public void onConnect(FixLibrary fixLibrary) {
         System.out.println("Connected to library " + fixLibrary.libraryId());
@@ -66,21 +62,25 @@ public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcqui
     }
 
     public void sendTestRequest() {
-        if (session != null && session.isConnected() && readyToSend) {
+        if (session != null && session.isConnected()) {
             encoder.testReqID(testReqId);
+            long startTime = SystemNanoClock.INSTANCE.nanoTime();
             session.trySend(encoder);
-            readyToSend = false;
-            sendTime = SystemNanoClock.INSTANCE.nanoTime();
+            long endTime = SystemNanoClock.INSTANCE.nanoTime();
+            histogram.recordValue((endTime - startTime) / 1000);
         }
     }
 
     public void printAndResetCounter() {
+        delta += (histogram.getTotalCount() - counter);
         System.out.printf("""
                         >>>
-                        Send-count  = [%d], receive count = [%d], p100 = [%d], p99.999 = [%d], p99.99 = [%d]
+                        Send-count  = [%d], receive count = [%d], send-rsv-delta = [%d], p100 = [%d], p99.999 = [%d], p99.99 = [%d]
+                       
                         """,
                 histogram.getTotalCount(),
                 counter,
+                delta,
                 histogram.getValueAtPercentile(100),
                 histogram.getValueAtPercentile(99.999),
                 histogram.getValueAtPercentile(99.99));
@@ -104,12 +104,7 @@ public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcqui
             decoder.decode(mutableAsciiBuffer, 0, length);
 
             if (decoder.hasTestReqID()) {
-                long rsvTime = SystemNanoClock.INSTANCE.nanoTime();
-                histogram.recordValue((rsvTime - sendTime) / 1000);
-                readyToSend = true;
                 counter++;
-            } else {
-                System.out.println("No test request , just regular heart beat");
             }
         }
 
