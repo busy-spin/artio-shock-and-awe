@@ -26,6 +26,7 @@ public class MediaDriverApp {
         });
 
         try (MediaDriver mediaDriver = MediaDriver.launch(ctx)) {
+            System.out.println("Media driver started");
             barrier.await();
         } finally {
             System.out.println("Exiting the program !!!");
