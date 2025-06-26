@@ -1,13 +1,14 @@
 package io.github.busy_spin.artio.fix_engine;
 
 import io.aeron.CommonContext;
+import org.agrona.concurrent.BusySpinIdleStrategy;
+import org.agrona.concurrent.NoOpIdleStrategy;
 import org.agrona.concurrent.ShutdownSignalBarrier;
 import org.agrona.concurrent.SigInt;
 import uk.co.real_logic.artio.MonitoringAgentFactory;
 import uk.co.real_logic.artio.engine.DefaultEngineScheduler;
 import uk.co.real_logic.artio.engine.EngineConfiguration;
 import uk.co.real_logic.artio.engine.FixEngine;
-import uk.co.real_logic.artio.library.FixLibrary;
 import uk.co.real_logic.artio.validation.AuthenticationStrategy;
 import uk.co.real_logic.artio.validation.MessageValidationStrategy;
 
@@ -20,6 +21,7 @@ public class FixEngineApp {
                 .logOutboundMessages(false)
                 .logInboundMessages(false)
                 .monitoringAgentFactory(MonitoringAgentFactory.none())
+                .framerIdleStrategy(new NoOpIdleStrategy())
                 .libraryAeronChannel(CommonContext.IPC_CHANNEL)
                 .bindTo("0.0.0.0", 2134)
                 .authenticationStrategy(AuthenticationStrategy.of(
