@@ -28,8 +28,27 @@ public class FixEngineApp {
                 .scheduler(new DefaultEngineScheduler());
 
         if (isAcceptorEngine) {
+
+            int outboundReplayStream = 103;
+            int archiveReplayStream = 104;
+            int reproductionLogStream = 106;
+            int reproductionReplayStream = 107;
+            int inboundAdminStream = 121;
+            int outboundAdminStream = 122;
+            int inboundLibraryStream = 101;
+            int outboundLibraryStream = 102;
+
             configuration
-                .bindTo("0.0.0.0", 2134)
+                    .inboundAdminStream(inboundAdminStream)
+                    .outboundAdminStream(outboundAdminStream)
+                    .reproductionLogStream(reproductionLogStream)
+                    .reproductionReplayStream(reproductionReplayStream)
+                    .outboundReplayStream(outboundReplayStream)
+                    .archiveReplayStream(archiveReplayStream)
+                    .inboundLibraryStream(inboundLibraryStream)
+                    .outboundLibraryStream(outboundLibraryStream)
+                    .logFileDir("logs_A")
+                    .bindTo("0.0.0.0", 2134)
                     .authenticationStrategy(
                             AuthenticationStrategy.of(
                                     MessageValidationStrategy.targetCompId("EXCHANGE")
@@ -46,7 +65,11 @@ public class FixEngineApp {
 
         FixEngine fixEngine = FixEngine.launch(configuration);
 
-        System.out.println("Fix Engine Started !!!");
+        if (isAcceptorEngine) {
+            System.out.println("Acceptor Fix Engine Started !!!");
+        } else {
+            System.out.println("Initiator Fix Engine Started !!!");
+        }
 
         ShutdownSignalBarrier barrier = new ShutdownSignalBarrier();
 
