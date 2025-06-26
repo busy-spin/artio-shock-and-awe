@@ -18,8 +18,6 @@ import uk.co.real_logic.artio.messages.DisconnectReason;
 import uk.co.real_logic.artio.session.Session;
 import uk.co.real_logic.artio.util.MutableAsciiBuffer;
 
-import java.nio.ByteBuffer;
-
 public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcquireHandler, SessionHandler, SessionExistsHandler {
 
     private Session session;
@@ -66,7 +64,11 @@ public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcqui
             long sendTime = SystemNanoClock.INSTANCE.nanoTime();
             encoder.testReqID(String.valueOf(sendTime));
             session.trySend(encoder);
-        } else if (session == null && fixLibrary != null && fixLibrary.isConnected()) {
+        }
+    }
+
+    public void checkStatus() {
+        if (session == null && fixLibrary != null && fixLibrary.isConnected()) {
             fixLibrary.initiate(SessionConfiguration.builder()
                     .address("localhost", 2134)
                     .targetCompId("EXCHANGE")
@@ -133,6 +135,7 @@ public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcqui
     public ControlledFragmentHandler.Action onDisconnect(int libraryId, Session session,
                                                          DisconnectReason disconnectReason) {
         System.out.println("Disconnected from session");
+        session = null;
         return ControlledFragmentHandler.Action.CONTINUE;
     }
 

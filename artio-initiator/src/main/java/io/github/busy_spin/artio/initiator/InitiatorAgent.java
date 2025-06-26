@@ -19,6 +19,18 @@ public class InitiatorAgent implements Agent {
 
     private FixLibrary library;
 
+    public InitiatorAgent() {
+        int throughput = 10_000;
+        String throughputStr = System.getProperty("artio_demo.throughput", String.valueOf(throughput));
+        try {
+            throughput = Integer.parseInt(throughputStr);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid value for artio_demo.throughput: " + throughputStr);
+            System.out.println("Setting default throughput to " + throughput);
+        }
+
+    }
+
     @Override
     public void onStart() {
         LibraryConfiguration configuration = new LibraryConfiguration()
