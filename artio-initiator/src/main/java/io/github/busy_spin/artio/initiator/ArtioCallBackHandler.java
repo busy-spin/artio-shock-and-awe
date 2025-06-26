@@ -22,17 +22,16 @@ import java.nio.ByteBuffer;
 
 public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcquireHandler, SessionHandler, SessionExistsHandler {
 
-    private String testReqId  = "ABC";
-
     private Session session;
 
     private final TestRequestEncoder encoder = new TestRequestEncoder();
 
     private final HeartbeatDecoder decoder = new HeartbeatDecoder();
 
-    private final ByteBuffer byteBuffer = ByteBuffer.allocate(Long.BYTES);
 
     private final MutableAsciiBuffer mutableAsciiBuffer = new MutableAsciiBuffer();
+
+    private FixLibrary fixLibrary;
 
     Histogram histogram = new Histogram(1, 200_000_000, 3);
 
@@ -43,6 +42,7 @@ public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcqui
     @Override
     public void onConnect(FixLibrary fixLibrary) {
         System.out.println("Connected to library " + fixLibrary.libraryId());
+        this.fixLibrary = fixLibrary;
         fixLibrary.initiate(SessionConfiguration.builder()
                         .address("localhost", 2134)
                         .targetCompId("EXCHANGE")
@@ -66,6 +66,12 @@ public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcqui
             long sendTime = SystemNanoClock.INSTANCE.nanoTime();
             encoder.testReqID(String.valueOf(sendTime));
             session.trySend(encoder);
+        } else if (session == null && fixLibrary != null && fixLibrary.isConnected()) {
+            fixLibrary.initiate(SessionConfiguration.builder()
+                    .address("localhost", 2134)
+                    .targetCompId("EXCHANGE")
+                    .senderCompId("TAKER_FIRM")
+                    .build());
         }
     }
 
@@ -115,6 +121,7 @@ public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcqui
     @Override
     public void onTimeout(int libraryId, Session session) {
         System.out.println("Session timed out");
+        session = null;
     }
 
     @Override
