@@ -11,6 +11,8 @@ pidstat -wt 1
 -t: show per-thread info.
 1: updates every second.
 
+pidstat -wt -p <pid> 1
+
 ## CPU affinity
 
 taskset -acp <cpu_list> <pid>
