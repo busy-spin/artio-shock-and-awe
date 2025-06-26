@@ -57,6 +57,7 @@ public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcqui
 
     @Override
     public SessionHandler onSessionAcquired(Session session, SessionAcquiredInfo sessionAcquiredInfo) {
+        this.session = session;
         return this;
     }
 
