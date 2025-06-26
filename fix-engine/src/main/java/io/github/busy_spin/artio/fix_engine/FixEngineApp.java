@@ -29,39 +29,25 @@ public class FixEngineApp {
 
         if (isAcceptorEngine) {
 
-            int outboundReplayStream = 103;
-            int archiveReplayStream = 104;
-            int reproductionLogStream = 106;
-            int reproductionReplayStream = 107;
-            int inboundAdminStream = 121;
-            int outboundAdminStream = 122;
-            int inboundLibraryStream = 101;
-            int outboundLibraryStream = 102;
-
             configuration
-                    .inboundAdminStream(inboundAdminStream)
-                    .outboundAdminStream(outboundAdminStream)
-                    .reproductionLogStream(reproductionLogStream)
-                    .reproductionReplayStream(reproductionReplayStream)
-                    .outboundReplayStream(outboundReplayStream)
-                    .archiveReplayStream(archiveReplayStream)
-                    .inboundLibraryStream(inboundLibraryStream)
-                    .outboundLibraryStream(outboundLibraryStream)
-                    .logFileDir("logs_A")
+                    .logFileDir("logs_acceptor")
+                    .deleteLogFileDirOnStart(true)
                     .bindTo("0.0.0.0", 2134)
                     .authenticationStrategy(
                             AuthenticationStrategy.of(
                                     MessageValidationStrategy.targetCompId("EXCHANGE")
                                             .and(MessageValidationStrategy.senderCompId(Collections.singletonList("TAKER_FIRM")))));
+            configuration.aeronContext().aeronDirectoryName(CommonContext.getAeronDirectoryName() + "-acceptor");
         } else {
-            configuration.bindTo("0.0.0.0", 2135)
+            configuration
+                    .logFileDir("logs_initiator")
+                    .bindTo("0.0.0.0", 2135)
                     .authenticationStrategy(
                             AuthenticationStrategy.of(
                                     MessageValidationStrategy.targetCompId("EXCHANGE_1")
                                             .and(MessageValidationStrategy.senderCompId(Collections.singletonList("TAKER_FIRM_1")))));
+            configuration.aeronContext().aeronDirectoryName(CommonContext.getAeronDirectoryName());
         }
-
-        configuration.aeronContext().aeronDirectoryName(CommonContext.getAeronDirectoryName());
 
         FixEngine fixEngine = FixEngine.launch(configuration);
 
