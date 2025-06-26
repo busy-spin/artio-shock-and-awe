@@ -34,7 +34,7 @@ public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcqui
 
     private final MutableAsciiBuffer mutableAsciiBuffer = new MutableAsciiBuffer();
 
-    Histogram histogram = new Histogram(1, 2_000_000, 3);
+    Histogram histogram = new Histogram(1, 200_000_000, 3);
 
     private long counter = 0;
 
@@ -63,11 +63,9 @@ public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcqui
 
     public void sendTestRequest() {
         if (session != null && session.isConnected()) {
-            encoder.testReqID(testReqId);
-            long startTime = SystemNanoClock.INSTANCE.nanoTime();
+            long sendTime = SystemNanoClock.INSTANCE.nanoTime();
+            encoder.testReqID(String.valueOf(sendTime));
             session.trySend(encoder);
-            long endTime = SystemNanoClock.INSTANCE.nanoTime();
-            histogram.recordValue((endTime - startTime) / 1000);
         }
     }
 
@@ -104,6 +102,9 @@ public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcqui
             decoder.decode(mutableAsciiBuffer, 0, length);
 
             if (decoder.hasTestReqID()) {
+                long startTime = Long.parseLong(decoder.testReqIDAsString());
+                long endTime = SystemNanoClock.INSTANCE.nanoTime();
+                histogram.recordValue((endTime - startTime) / 1000);
                 counter++;
             }
         }
