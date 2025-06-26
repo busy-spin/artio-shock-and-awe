@@ -3,18 +3,24 @@ package io.github.busy_spin.artio.initiator;
 import io.aeron.logbuffer.ControlledFragmentHandler;
 import org.HdrHistogram.Histogram;
 import org.agrona.DirectBuffer;
-import org.agrona.concurrent.SystemEpochClock;
 import org.agrona.concurrent.SystemNanoClock;
 import uk.co.real_logic.artio.builder.TestRequestEncoder;
 import uk.co.real_logic.artio.decoder.HeartbeatDecoder;
-import uk.co.real_logic.artio.library.*;
+import uk.co.real_logic.artio.library.FixLibrary;
+import uk.co.real_logic.artio.library.LibraryConnectHandler;
+import uk.co.real_logic.artio.library.OnMessageInfo;
+import uk.co.real_logic.artio.library.SessionAcquireHandler;
+import uk.co.real_logic.artio.library.SessionAcquiredInfo;
+import uk.co.real_logic.artio.library.SessionConfiguration;
+import uk.co.real_logic.artio.library.SessionExistsHandler;
+import uk.co.real_logic.artio.library.SessionHandler;
 import uk.co.real_logic.artio.messages.DisconnectReason;
 import uk.co.real_logic.artio.session.Session;
 import uk.co.real_logic.artio.util.MutableAsciiBuffer;
 
 import java.nio.ByteBuffer;
 
-public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcquireHandler, SessionHandler {
+public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcquireHandler, SessionHandler, SessionExistsHandler {
 
     private String testReqId  = "ABC";
 
@@ -55,7 +61,7 @@ public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcqui
     }
 
     public void sendTestRequest() {
-        if (session != null) {
+        if (session != null && session.isConnected()) {
             encoder.testReqID(testReqId);
             long startTime = SystemNanoClock.INSTANCE.nanoTime();
             session.trySend(encoder);
@@ -125,5 +131,20 @@ public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcqui
     public void onSessionStart(Session session) {
         System.out.println("Session started");
         this.session = session;
+    }
+
+    @Override
+    public void onSessionExists(
+            final FixLibrary library,
+            final long surrogateSessionId,
+            final String localCompId,
+            final String localSubId,
+            final String localLocationId,
+            final String remoteCompId,
+            final String remoteSubId,
+            final String remoteLocationId, final int logonReceivedSequenceNumber, final int logonSequenceIndex) {
+
+        library.requestSession(surrogateSessionId, FixLibrary.NO_MESSAGE_REPLAY,
+                FixLibrary.NO_MESSAGE_REPLAY, 10_000);
     }
 }

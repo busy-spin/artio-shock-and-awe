@@ -25,7 +25,8 @@ public class InitiatorAgent implements Agent {
                 .libraryConnectHandler(handler)
                 .libraryAeronChannels(Collections.singletonList(CommonContext.IPC_CHANNEL))
                 .libraryName("initiator-app").defaultHeartbeatIntervalInS(2)
-                .sessionAcquireHandler(handler);
+                .sessionAcquireHandler(handler)
+                .sessionExistsHandler(handler);
         configuration.aeronContext().aeronDirectoryName(CommonContext.getAeronDirectoryName());
         library = FixLibrary.connect(configuration);
         System.out.println("Library Id " + library.libraryId());
