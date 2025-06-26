@@ -29,8 +29,8 @@ taskset -ca 0-2 java -XX:+UnlockExperimentalVMOptions -XX:+UseEpsilonGC -Xmx2g -
 ```
 
 ```shell
-java -XX:+UnlockExperimentalVMOptions-Xmx2g -Xms2g --add-opens java.base/sun.nio.ch=ALL-UNNAMED -Dfix.core.receiver_buffer_size=1048576 -Dfix.core.sender_socket_buffer_size=16777216 -Dfix.core.receiver_socket_buffer_size=16777216 -jar ~/apps/fix-engine.jar
-taskset -ca 3-5 java -XX:+UnlockExperimentalVMOptions -Xmx2g -Xms2g --add-opens java.base/sun.nio.ch=ALL-UNNAMED -Dfix.core.receiver_buffer_size=1048576 -Dfix.core.sender_socket_buffer_size=16777216 -Dfix.core.receiver_socket_buffer_size=16777216 -jar ~/apps/fix-engine.jar
+java -XX:+UnlockExperimentalVMOptions -XX:+UseEpsilonGC -Xmx2g -Xms2g --add-opens java.base/sun.nio.ch=ALL-UNNAMED -Dfix.core.receiver_buffer_size=1048576 -Dfix.core.sender_socket_buffer_size=16777216 -Dfix.core.receiver_socket_buffer_size=16777216 -jar ~/apps/fix-engine.jar
+taskset -ca 3-5 java -XX:+UnlockExperimentalVMOptions -XX:+UseEpsilonGC -Xmx2g -Xms2g --add-opens java.base/sun.nio.ch=ALL-UNNAMED -Dfix.core.receiver_buffer_size=1048576 -Dfix.core.sender_socket_buffer_size=16777216 -Dfix.core.receiver_socket_buffer_size=16777216 -jar ~/apps/fix-engine.jar
 ```
 
 ```shell
