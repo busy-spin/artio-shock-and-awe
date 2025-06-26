@@ -34,7 +34,7 @@ public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcqui
 
     private final MutableAsciiBuffer mutableAsciiBuffer = new MutableAsciiBuffer();
 
-    Histogram histogram = new Histogram(1, 2_000_000, 5);
+    Histogram histogram = new Histogram(1, 100_000, 3);
 
     private long counter = 0;
 
