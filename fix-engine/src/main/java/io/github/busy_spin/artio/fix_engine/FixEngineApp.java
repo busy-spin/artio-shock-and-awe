@@ -1,7 +1,6 @@
 package io.github.busy_spin.artio.fix_engine;
 
 import io.aeron.CommonContext;
-import org.agrona.concurrent.BusySpinIdleStrategy;
 import org.agrona.concurrent.NoOpIdleStrategy;
 import org.agrona.concurrent.ShutdownSignalBarrier;
 import org.agrona.concurrent.SigInt;
