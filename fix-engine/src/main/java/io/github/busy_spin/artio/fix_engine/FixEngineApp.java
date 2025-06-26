@@ -15,6 +15,9 @@ import java.util.Collections;
 
 public class FixEngineApp {
     public static void main(String[] args) {
+
+        boolean isAcceptorEngine = "true".equals(System.getProperty("artio_demo.acceptor.engine", "false"));
+
         EngineConfiguration configuration = new EngineConfiguration()
                 .monitoringAgentFactory(MonitoringAgentFactory.none())
                 .logOutboundMessages(false)
@@ -22,11 +25,18 @@ public class FixEngineApp {
                 .monitoringAgentFactory(MonitoringAgentFactory.none())
                 .framerIdleStrategy(new NoOpIdleStrategy())
                 .libraryAeronChannel(CommonContext.IPC_CHANNEL)
-                .bindTo("0.0.0.0", 2134)
-                .authenticationStrategy(AuthenticationStrategy.of(
-                        MessageValidationStrategy.targetCompId("EXCHANGE")
-                                .and(MessageValidationStrategy.senderCompId(Collections.singletonList("TAKER_FIRM")))))
                 .scheduler(new DefaultEngineScheduler());
+
+        if (isAcceptorEngine) {
+            configuration
+                .bindTo("0.0.0.0", 2134)
+                    .authenticationStrategy(
+                            AuthenticationStrategy.of(
+                                    MessageValidationStrategy.targetCompId("EXCHANGE")
+                                            .and(MessageValidationStrategy.senderCompId(Collections.singletonList("TAKER_FIRM")))));
+        } else {
+            configuration.bindTo("0.0.0.0", 2135);
+        }
 
         configuration.aeronContext().aeronDirectoryName(CommonContext.getAeronDirectoryName());
 
