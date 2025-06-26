@@ -24,7 +24,7 @@ taskset -acp 0-3 4456
 ## Media Driver
 
 ```shell
-java -jar ~/apps/media-driver.jar
+java -XX:+UnlockExperimentalVMOptions -XX:+UseEpsilonGC -Xmx2g -Xms2g -jar ~/apps/media-driver.jar
 ```
 
 ```shell
