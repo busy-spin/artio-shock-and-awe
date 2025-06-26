@@ -35,7 +35,11 @@ public class FixEngineApp {
                                     MessageValidationStrategy.targetCompId("EXCHANGE")
                                             .and(MessageValidationStrategy.senderCompId(Collections.singletonList("TAKER_FIRM")))));
         } else {
-            configuration.bindTo("0.0.0.0", 2135);
+            configuration.bindTo("0.0.0.0", 2135)
+                    .authenticationStrategy(
+                            AuthenticationStrategy.of(
+                                    MessageValidationStrategy.targetCompId("EXCHANGE_1")
+                                            .and(MessageValidationStrategy.senderCompId(Collections.singletonList("TAKER_FIRM_1")))));
         }
 
         configuration.aeronContext().aeronDirectoryName(CommonContext.getAeronDirectoryName());
