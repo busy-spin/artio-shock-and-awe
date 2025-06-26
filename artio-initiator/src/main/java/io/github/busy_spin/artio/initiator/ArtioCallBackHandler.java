@@ -18,6 +18,8 @@ import uk.co.real_logic.artio.messages.DisconnectReason;
 import uk.co.real_logic.artio.session.Session;
 import uk.co.real_logic.artio.util.MutableAsciiBuffer;
 
+import java.nio.ByteBuffer;
+
 public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcquireHandler, SessionHandler, SessionExistsHandler {
 
     private String testReqId  = "ABC";
@@ -28,10 +30,11 @@ public class ArtioCallBackHandler implements LibraryConnectHandler, SessionAcqui
 
     private final HeartbeatDecoder decoder = new HeartbeatDecoder();
 
+    private final ByteBuffer byteBuffer = ByteBuffer.allocate(Long.BYTES);
 
     private final MutableAsciiBuffer mutableAsciiBuffer = new MutableAsciiBuffer();
 
-    Histogram histogram = new Histogram(1, 100_000, 3);
+    Histogram histogram = new Histogram(1, 2_000_000, 3);
 
     private long counter = 0;
 
