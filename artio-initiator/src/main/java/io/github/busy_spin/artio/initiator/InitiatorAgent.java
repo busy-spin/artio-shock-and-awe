@@ -24,7 +24,7 @@ public class InitiatorAgent implements Agent {
     private FixLibrary library;
 
     public InitiatorAgent() {
-        int throughput = 100;
+        int throughput = 1000;
         String throughputStr = System.getProperty("artio_demo.throughput", String.valueOf(throughput));
         try {
             throughput = Integer.parseInt(throughputStr);
