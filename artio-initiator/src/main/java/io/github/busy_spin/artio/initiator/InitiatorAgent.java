@@ -12,7 +12,11 @@ public class InitiatorAgent implements Agent {
 
     private final ArtioCallBackHandler handler = new ArtioCallBackHandler();
 
-    private final long reportInterval = 1_000;
+    private final long houseKeepInterval = 1_000;
+
+    private final int messagesPerMs;
+    private int lastMsCount = 0;
+    private long currentTimestamp = System.currentTimeMillis();
 
     private long lastInterval = SystemEpochClock.INSTANCE.time();
 
@@ -20,7 +24,7 @@ public class InitiatorAgent implements Agent {
     private FixLibrary library;
 
     public InitiatorAgent() {
-        int throughput = 10_000;
+        int throughput = 100;
         String throughputStr = System.getProperty("artio_demo.throughput", String.valueOf(throughput));
         try {
             throughput = Integer.parseInt(throughputStr);
@@ -28,6 +32,8 @@ public class InitiatorAgent implements Agent {
             System.out.println("Invalid value for artio_demo.throughput: " + throughputStr);
             System.out.println("Setting default throughput to " + throughput);
         }
+
+        messagesPerMs = throughput / 1000;
 
     }
 
@@ -51,11 +57,21 @@ public class InitiatorAgent implements Agent {
 
     @Override
     public int doWork() throws Exception {
-        handler.sendTestRequest();
         library.poll(10);
-        if (SystemEpochClock.INSTANCE.time() > reportInterval + lastInterval) {
+        if (SystemEpochClock.INSTANCE.time() > houseKeepInterval + lastInterval) {
             lastInterval = SystemEpochClock.INSTANCE.time();
             handler.printAndResetCounter();
+            handler.checkStatus();
+        }
+
+        if (SystemEpochClock.INSTANCE.time() > currentTimestamp) {
+            currentTimestamp = SystemEpochClock.INSTANCE.time();
+            lastMsCount = 0;
+        } else {
+            if (lastMsCount < messagesPerMs) {
+                lastMsCount++;
+                handler.sendTestRequest();
+            }
         }
 
         return 1;
