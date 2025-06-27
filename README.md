@@ -37,7 +37,7 @@ taskset -ca 3-5 java -XX:+UnlockExperimentalVMOptions -Xmx2g -Xms2g --add-opens 
 
 ```shell
 java -jar ~/apps/artio-initiator.jar
-taskset -ca 6-8 java -jar ~/apps/artio-initiator.jar
+taskset -ca 6-8 java -Dartio_demo.throughput=10000 -jar ~/apps/artio-initiator.jar
 ```
 
 
